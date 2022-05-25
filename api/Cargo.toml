@@ -5,7 +5,7 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [workspace]
-members = [".", "entity"]
+members = [".", "entity", "migration"]
 
 [dependencies]
 actix-web = "4"
@@ -16,3 +16,4 @@ serde_json = "1.0.79"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
 entity = { path = "entity" }
+migration = { path = "migration" }
