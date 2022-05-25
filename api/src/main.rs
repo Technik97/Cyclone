@@ -1,4 +1,8 @@
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, middleware};
+use entity::db::app_state::AppState;
+use entity::db::conn;
+use listenfd::ListenFd;
+use entity::dotenv;
 
 #[get("/")]
 async fn hello() -> impl Responder {
@@ -16,13 +20,33 @@ async fn manual_hello() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| {
+    std::env::set_var("RUST_LOG", "debug");
+    tracing_subscriber::fmt::init();
+
+    dotenv::dotenv().ok();
+    let mut listenfd = ListenFd::from_env();
+
+    let conn = conn::get_conn().await.to_owned();
+    let server_url = conn::get_server_url();
+
+    let state = AppState { conn };
+
+    let mut server = HttpServer::new(move || {
         App::new()
+            .data(state.clone())
+            .wrap(middleware::Logger::default())
             .service(hello)
             .service(echo)
             .route("/hey", web::get().to(manual_hello))
-    })
-    .bind(("127.0.0.1", 8080))?
-    .run()
-    .await
+    });
+
+    server = match listenfd.take_tcp_listener(0)? {
+        Some(listener) => server.listen(listener)?,
+        None => server.bind(&server_url)?,
+    };
+
+    println!("Starting server at {}", server_url);
+    server.run().await?;
+
+    Ok(())
 }
