@@ -5,7 +5,7 @@ use std::env;
 
 pub fn get_server_url() -> String {
     let host = env::var("HOST").expect("HOST is not set in .env file");
-    let port = envv::var("PORT").expect("PORT is not set in .env file");
+    let port = env::var("PORT").expect("PORT is not set in .env file");
     let server_url = format!("{}:{}", host, port);
 
     server_url
