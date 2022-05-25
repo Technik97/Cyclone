@@ -1,5 +1,5 @@
 [package]
-name = "Entity"
+name = "entity"
 version = "0.1.0"
 edition = "2021"
 publish = false
@@ -19,4 +19,5 @@ sea-orm = { version = "^0.7.0", features = [
   "sqlx-postgres"
 ]}
 tokio = "1.18.1"
-dotenv = ""0.15"
+dotenv = "0.15"
+anyhow = "1.0.57"
