@@ -1,8 +1,10 @@
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, middleware};
+use listenfd::ListenFd;
+
 use entity::db::app_state::AppState;
 use entity::db::conn;
-use listenfd::ListenFd;
 use entity::dotenv;
+use migration::{Migrator, MigratorTrait};
 
 #[get("/")]
 async fn hello() -> impl Responder {
@@ -28,6 +30,8 @@ async fn main() -> std::io::Result<()> {
 
     let conn = conn::get_conn().await.to_owned();
     let server_url = conn::get_server_url();
+
+    Migrator::up(&conn, None).await.unwrap();
 
     let state = AppState { conn };
 
