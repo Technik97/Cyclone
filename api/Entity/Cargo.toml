@@ -12,7 +12,7 @@ path = "src/lib.rs"
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }
-sea-orm = { version = "^0.7.0", features = [
+sea-orm = { version = "^0.8.0", features = [
   "macros",
   "debug-print",
   "runtime-async-std-native-tls",
@@ -21,3 +21,4 @@ sea-orm = { version = "^0.7.0", features = [
 tokio = "1.18.1"
 dotenv = "0.15"
 anyhow = "1.0.57"
+chrono = "0.4.19"
