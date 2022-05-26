@@ -1,17 +1,23 @@
 <script lang="ts">
-	import Header from '$lib/header/Header.svelte';
 	import '../app.css';
 </script>
 
-<Header />
+<div class="flex flex-wrap border-b-2 border-pink-500">
+	<div class="w-full">
+		<nav class="relative flex flex-wrap items-center justify-end px-2 py-3 navbar-expand-lg bg-slate-900">
+				<div class="px-3">
+					<button class="bg-pink-500 px-4 py-3 rounded">Sign In</button>
+				</div>
+				<div>
+					<button class="bg-pink-500 px-4 py-3 rounded">Register</button>
+				</div>
+		</nav>
+	</div>
+</div>
 
-<main>
+<main class="bg-slate-900">
 	<slot />
 </main>
-
-<footer>
-	<p class="text-sky-500">visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit</p>
-</footer>
 
 <style global lang="postcss">
 	@tailwind base;
