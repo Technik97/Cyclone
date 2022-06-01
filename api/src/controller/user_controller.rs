@@ -1,21 +1,23 @@
 use actix_web::{web, Responder, HttpResponse, post};
 
-use entity::data::user::{SignInRequest,sign_up};
+use entity::data::user::{SignInRequest,sign_up, SignInResponse, User};
 
 #[post("/sign_up")]
 pub async fn create(form: web::Form<SignInRequest>) -> impl Responder {
-    let response = sign_up(&form.username, &form.email, &form.password).await;
+    let model = sign_up(&form.username, &form.email, &form.password).await;
 
-    match response {
-        model => {
-            HttpResponse::Ok()  //.content_type("application/json").json(res)
-        },
-        db_err => {
-            // let resp = ErrorResponse{
-            //     err_msg: "Cannot Resgiter".to_owned(),
-            // };
+    let user = User { 
+        id: model.id , 
+        username: model.username, 
+        email: model.email,
+        password: model.password, 
+        created_at: model.created_at, 
+        updated_at: model.updated_at, 
+    };
 
-            HttpResponse::BadRequest()   //.content_type("application/json").json(resp)
-        },
-    }
+    let response = SignInResponse {
+        user: user
+    };
+
+    HttpResponse::Ok().json(response)
 }

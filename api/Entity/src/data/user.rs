@@ -14,7 +14,22 @@ pub struct SignInRequest {
     pub password: String,
 }
 
-pub async fn sign_up(username: &String, email: &String, password: &String) -> Result<Model, DbErr> {
+#[derive(Serialize, Deserialize, Debug)]
+pub struct User {
+    pub id: i32,
+    pub username: String,
+    pub email:    String,
+    pub password: String,
+    pub created_at: NaiveDateTime,
+    pub updated_at: NaiveDateTime,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct SignInResponse {
+   pub user: User,
+}
+
+pub async fn sign_up(username: &String, email: &String, password: &String) -> Model {
     let conn = get_conn().await.to_owned();
 
     let salt = b"randomsalt";
@@ -41,6 +56,6 @@ pub async fn sign_up(username: &String, email: &String, password: &String) -> Re
         .expect("Could not sign up");
     
 
-    Ok(user)
+    user
 
 }
