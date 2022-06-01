@@ -4,6 +4,7 @@ use argon2::{self, Config};
 use sea_orm::{ActiveModelTrait, DbErr};
 use serde::{Serialize, Deserialize};
 use sea_orm::ActiveValue::Set;
+use chrono::{Utc, NaiveDateTime};
 
 #[derive(Serialize, Deserialize, Debug, Default)]
 #[serde(default)]
@@ -13,13 +14,7 @@ pub struct SignInRequest {
     pub password: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
-// #[serde(default)]
-pub struct SignInResponse {
-    pub msg: String,
-}
-
-pub async fn sign_up(username: &String, email: &String, password: &String) -> () {
+pub async fn sign_up(username: &String, email: &String, password: &String) -> Result<Model, DbErr> {
     let conn = get_conn().await.to_owned();
 
     let salt = b"randomsalt";
@@ -27,14 +22,25 @@ pub async fn sign_up(username: &String, email: &String, password: &String) -> ()
     let pwd = password.as_bytes();
     let hashed_password = argon2::hash_encoded(pwd, salt, &config).unwrap();
 
-    let user = ActiveModel {
+    let mut user = ActiveModel {
         username: Set(username.to_owned()),
         email: Set(email.to_owned()),
         password: Set(hashed_password.to_owned()),
+        created_at: Set(Utc::now().naive_utc()),
+        updated_at: Set(Utc::now().naive_utc()),
         ..Default::default()
-    }
-    .save(&conn)
-    .await
-    .expect("Could Not Sign Up");
+    };
+
+    // .save(&conn)
+    // .await
+    // .expect("Could Not Sign Up");
+
+    let user: Model = user
+        .insert(&conn)
+        .await
+        .expect("Could not sign up");
+    
+
+    Ok(user)
 
 }
