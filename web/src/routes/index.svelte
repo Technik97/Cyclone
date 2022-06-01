@@ -3,7 +3,6 @@
 </script>
 
 <script lang="ts">
-	import Counter from '$lib/Counter.svelte';
 </script>
 
 <svelte:head>
@@ -15,5 +14,4 @@
 	<div>
 		<p class="text-sky-500">Hello</p>
 	<div>
-	<Counter />
 </section>
