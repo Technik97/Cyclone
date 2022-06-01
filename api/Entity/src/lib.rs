@@ -5,3 +5,4 @@ pub use serde;
 
 pub mod db;
 pub mod user;
+pub mod data;

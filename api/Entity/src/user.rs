@@ -2,10 +2,6 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 use chrono::prelude::*;
 
-// use crate::db::conn::get_conn;
-
-
-
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Deserialize, Serialize)]
 #[sea_orm(table_name = "users")]
 pub struct Model {
