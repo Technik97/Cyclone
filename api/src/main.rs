@@ -1,5 +1,6 @@
 use actix_web::{web, get, App, HttpServer, middleware, Responder, HttpResponse};
 use listenfd::ListenFd;
+use actix_cors::Cors;
 
 use entity::db::app_state::AppState;
 use entity::db::conn;
@@ -30,9 +31,12 @@ async fn main() -> std::io::Result<()> {
     let state = AppState { conn };
 
     let mut server = HttpServer::new(move || {
+        let cors = Cors::permissive();
+
         App::new()
             .data(state.clone())
             .wrap(middleware::Logger::default())
+            .wrap(cors)
             .configure(init)
     });
 
