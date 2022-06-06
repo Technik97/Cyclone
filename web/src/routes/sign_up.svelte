@@ -1,7 +1,7 @@
 <script lang="ts">
   import { sign_up } from "../data/sign_up";
 
-  let username; let email; let password;
+  let username: string; let email: string; let password: string;
 
   const register = async () => {
     await sign_up(username, email, password);
