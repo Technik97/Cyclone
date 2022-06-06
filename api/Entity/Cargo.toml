@@ -18,7 +18,7 @@ sea-orm = { version = "^0.8.0", features = [
   "runtime-async-std-native-tls",
   "sqlx-postgres"
 ]}
-tokio = "1.18.1"
+tokio = { version = "1.18.1", features = ["macros", "rt-multi-thread"] }
 dotenv = "0.15"
 anyhow = "1.0.57"
 chrono = "0.4.19"
